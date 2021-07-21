@@ -1,5 +1,7 @@
 package githubSelenide;
 
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +52,27 @@ public class FindSelenideTest {
         $$(".Popover-message")
                 .findBy(visible)
                 .shouldHave(text("Andrei Solntsev"));
+    }
+
+    @Test
+    void checkSoftAssertionDocs() {
+
+        // - Откройте страницу Selenide в Github
+        open("https://github.com/selenide/selenide");
+
+        // - Перейдите в раздел Wiki проекта
+        $$("nav[aria-label=Repository] li").findBy(text("Wiki")).click();
+
+        // - Убедитесь, что в списке страниц (Pages) есть страница SoftAssertions
+        $("#wiki-pages-box li.wiki-more-pages-link button").click();
+        SelenideElement softAssertionLink = $$("#wiki-pages-box li").findBy(text("SoftAssertions"));
+        softAssertionLink.shouldBe(visible);
+
+        // - Откройте страницу SoftAssertions, проверьте что внутри есть пример кода для JUnit5
+        softAssertionLink.click();
+        $x("//*[@id='wiki-body']//ol//li[contains(text(), 'Using JUnit5')]")
+                .parent().sibling(0).$("pre").shouldNotBe(empty);
+
+
     }
 }
