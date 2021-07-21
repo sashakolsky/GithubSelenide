@@ -1,9 +1,10 @@
 package githubSelenide;
 
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class FindSelenideTest {
@@ -32,5 +33,22 @@ public class FindSelenideTest {
 
         // проверка: в заголовке встречается selenide
         Assertions.assertTrue(title().contains("selenide"));
+    }
+
+    @Test
+    void checkTopContributor() {
+
+        open("https://github.com/selenide/selenide");
+
+        $(".BorderGrid")
+                .$(byText("Contributors"))
+                .closest(".BorderGrid-cell")
+                .$("li")
+                .scrollIntoView(true)
+                .hover();
+
+        $$(".Popover-message")
+                .findBy(visible)
+                .shouldHave(text("Andrei Solntsev"));
     }
 }
