@@ -72,7 +72,5 @@ public class FindSelenideTest {
         softAssertionLink.click();
         $x("//*[@id='wiki-body']//ol//li[contains(text(), 'Using JUnit5')]")
                 .parent().sibling(0).$("pre").shouldNotBe(empty);
-
-
     }
 }
