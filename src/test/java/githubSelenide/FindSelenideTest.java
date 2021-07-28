@@ -1,12 +1,11 @@
 package githubSelenide;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class FindSelenideTest {
@@ -22,8 +21,6 @@ public class FindSelenideTest {
         // Act      ->  When    (another button click)
         //-----------------------------------------//   OPTIONAL
         // Assert   ->  Then    (something happened)    REQUIRED
-
-        // Базовые шаги в тесте:
 
         // Открыть страницу Github
         open("https://github.com/");
@@ -61,16 +58,19 @@ public class FindSelenideTest {
         open("https://github.com/selenide/selenide");
 
         // - Перейдите в раздел Wiki проекта
-        $$("nav[aria-label=Repository] li").findBy(text("Wiki")).click();
+        $("#wiki-tab").click();
 
-        // - Убедитесь, что в списке страниц (Pages) есть страница SoftAssertions
+        // - Убедитесь, что в списке страниц (Pages) есть страница SoftAssertions и открыть ее перейдя по ссылке.
         $("#wiki-pages-box li.wiki-more-pages-link button").click();
-        SelenideElement softAssertionLink = $$("#wiki-pages-box li").findBy(text("SoftAssertions"));
-        softAssertionLink.shouldBe(visible);
+        $$("#wiki-pages-box li")
+                .findBy(text("SoftAssertions"))
+                .click();
 
-        // - Откройте страницу SoftAssertions, проверьте что внутри есть пример кода для JUnit5
-        softAssertionLink.click();
-        $x("//*[@id='wiki-body']//ol//li[contains(text(), 'Using JUnit5')]")
-                .parent().sibling(0).$("pre").shouldNotBe(empty);
+        // - Проверьте что внутри есть пример кода для JUnit5
+        $("#wiki-body")
+                .find(withText("Using JUnit5"))
+                .parent().sibling(0)
+                .$("pre")
+                .shouldNotBe(empty);
     }
 }
